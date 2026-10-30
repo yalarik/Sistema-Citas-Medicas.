@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package gt.edu.umg.sistemacitas.config;
 
 import gt.edu.umg.sistemacitas.entity.Rol;
@@ -24,27 +21,30 @@ public class DataInitializer {
 
             String correoAdmin = "admin@citas.com";
 
-            // Evita crear el administrador más de una vez
-            if (usuarioRepository.findByCorreo(correoAdmin).isEmpty()) {
-
-                Usuario admin = new Usuario();
-
-                admin.setNombre("Administrador");
-                admin.setCorreo(correoAdmin);
-
-
-                admin.setPassword(
-                        passwordEncoder.encode("Admin123*")
-                );
-
-                admin.setRol(Rol.ROLE_ADMIN);
-
-                usuarioRepository.save(admin);
-
-                System.out.println(
-                        "Usuario administrador de prueba creado correctamente."
-                );
+            // No modificar administradores existentes
+            if (usuarioRepository.findByCorreo(correoAdmin).isPresent()) {
+                return;
             }
+
+            // Obtener la contraseña desde Windows
+            String clave = System.getenv("ADMIN_BOOTSTRAP_PASSWORD");
+
+            if (clave == null || clave.length() < 12) {
+                System.out.println(
+                        "Administrador inicial no creado: configure ADMIN_BOOTSTRAP_PASSWORD con al menos 12 caracteres."
+                );
+                return;
+            }
+
+            Usuario admin = new Usuario();
+            admin.setNombre("Administrador");
+            admin.setCorreo(correoAdmin);
+            admin.setPassword(passwordEncoder.encode(clave));
+            admin.setRol(Rol.ROLE_ADMIN);
+
+            usuarioRepository.save(admin);
+
+            System.out.println("Administrador inicial creado.");
         };
     }
 }
