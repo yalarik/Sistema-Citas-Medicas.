@@ -1,0 +1,47 @@
+digraph CitasMedicas {
+ graph [rankdir=LR, bgcolor="white", fontname="Arial", pad="0.4", ranksep="0.85", nodesep="0.55", splines=polyline, label="MODELO ENTIDAD–RELACIÓN · SISTEMA DE CITAS MÉDICAS", labelloc=t, fontsize=22, fontcolor="#17324f", outputorder=edgesfirst];
+ node [shape=plain, fontname="Arial"];
+ edge [fontname="Arial", fontsize=11, color="#607994", penwidth=1.5, arrowsize=0.7];
+ usuarios [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#f8fbff" COLOR="#b5c8db">
+ <TR><TD BGCOLOR="#16446a" COLSPAN="2"><FONT COLOR="white"><B>USUARIOS</B></FONT></TD></TR>
+ <TR><TD ALIGN="LEFT"><B>PK</B> id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT">nombre</TD><TD ALIGN="LEFT">VARCHAR(150)</TD></TR>
+ <TR><TD ALIGN="LEFT">correo (UNIQUE)</TD><TD ALIGN="LEFT">VARCHAR(150)</TD></TR>
+ <TR><TD ALIGN="LEFT">password (hash)</TD><TD ALIGN="LEFT">VARCHAR(255)</TD></TR>
+ <TR><TD ALIGN="LEFT">rol</TD><TD ALIGN="LEFT">ENUM</TD></TR></TABLE>>];
+ especialidades [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#f8fbff" COLOR="#b5c8db">
+ <TR><TD BGCOLOR="#16446a" COLSPAN="2"><FONT COLOR="white"><B>ESPECIALIDADES</B></FONT></TD></TR>
+ <TR><TD ALIGN="LEFT"><B>PK</B> id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT">nombre (UNIQUE)</TD><TD ALIGN="LEFT">VARCHAR(100)</TD></TR>
+ <TR><TD ALIGN="LEFT">descripcion</TD><TD ALIGN="LEFT">VARCHAR(500)</TD></TR></TABLE>>];
+ doctores [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#f8fbff" COLOR="#b5c8db">
+ <TR><TD BGCOLOR="#207b89" COLSPAN="2"><FONT COLOR="white"><B>DOCTORES</B></FONT></TD></TR>
+ <TR><TD ALIGN="LEFT"><B>PK</B> id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT"><B>FK</B> usuario_id (UNIQUE)</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT"><B>FK</B> especialidad_id (NULL)</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT">numero_colegiado (UNIQUE)</TD><TD ALIGN="LEFT">VARCHAR(50)</TD></TR>
+ <TR><TD ALIGN="LEFT">biografia</TD><TD ALIGN="LEFT">VARCHAR(500)</TD></TR></TABLE>>];
+ horarios [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#f8fbff" COLOR="#b5c8db">
+ <TR><TD BGCOLOR="#207b89" COLSPAN="2"><FONT COLOR="white"><B>HORARIOS</B></FONT></TD></TR>
+ <TR><TD ALIGN="LEFT"><B>PK</B> id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT"><B>FK</B> doctor_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT">fecha</TD><TD ALIGN="LEFT">DATE</TD></TR>
+ <TR><TD ALIGN="LEFT">hora_inicio</TD><TD ALIGN="LEFT">TIME</TD></TR>
+ <TR><TD ALIGN="LEFT">hora_fin</TD><TD ALIGN="LEFT">TIME</TD></TR>
+ <TR><TD ALIGN="LEFT">disponible</TD><TD ALIGN="LEFT">BOOLEAN</TD></TR></TABLE>>];
+ citas [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#f8fbff" COLOR="#b5c8db">
+ <TR><TD BGCOLOR="#207b89" COLSPAN="2"><FONT COLOR="white"><B>CITAS</B></FONT></TD></TR>
+ <TR><TD ALIGN="LEFT"><B>PK</B> id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT"><B>FK</B> doctor_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT"><B>FK</B> paciente_id</TD><TD ALIGN="LEFT">BIGINT</TD></TR>
+ <TR><TD ALIGN="LEFT">fecha / hora</TD><TD ALIGN="LEFT">DATE / TIME</TD></TR>
+ <TR><TD ALIGN="LEFT">motivo</TD><TD ALIGN="LEFT">VARCHAR(500)</TD></TR>
+ <TR><TD ALIGN="LEFT">estado</TD><TD ALIGN="LEFT">ENUM</TD></TR>
+ <TR><TD ALIGN="LEFT">diagnostico</TD><TD ALIGN="LEFT">VARCHAR(1000)</TD></TR>
+ <TR><TD ALIGN="LEFT">receta</TD><TD ALIGN="LEFT">VARCHAR(1000)</TD></TR></TABLE>>];
+ usuarios -> doctores [label="1 → 0..1\nusuario_id UNIQUE", color="#2c8a96"];
+ especialidades -> doctores [label="1 → N\nespecialidad_id", color="#2c8a96"];
+ doctores -> horarios [label="1 → N\ndoctor_id", color="#2c8a96"];
+ doctores -> citas [label="1 → N\ndoctor_id", color="#2c8a96"];
+ usuarios -> citas [label="1 → N\npaciente_id", color="#6f7f9c", constraint=false];
+}
