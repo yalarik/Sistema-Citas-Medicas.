@@ -40,6 +40,9 @@ export const roleGuard: CanActivateFn = (route) => {
     case 'ROLE_PATIENT':
       return router.createUrlTree(['/paciente']);
 
+    case 'ROLE_SECRETARY':
+      return router.createUrlTree(['/secretaria']);
+
     default:
       return router.createUrlTree(['/login']);
   }

@@ -35,6 +35,7 @@ imports: [CommonModule, FormsModule, ReactiveFormsModule],
 <!-- Administracion de usuarios y especialidades -->
 <section *ngIf="token && rol==='ROLE_ADMIN'">
   <h2>Usuarios</h2>
+  <button type="button" (click)="irAReportes()">Ver reportes administrativos</button>
   <h3>Registrar nuevo usuario</h3>
 
 <form (ngSubmit)="crearUsuario()">
@@ -501,6 +502,10 @@ login() {
           this.router.navigate(['/paciente']);
           break;
 
+        case 'ROLE_SECRETARY':
+          this.router.navigate(['/secretaria']);
+          break;
+
         default:
           this.error = 'El usuario no tiene un panel configurado';
           return;
@@ -531,6 +536,11 @@ salir() {
   this.router.navigate(['/login']);
 }
 
+
+// Abrir el nuevo módulo de reportes sin cambiar la administración actual.
+irAReportes() {
+  this.router.navigate(['/admin/reportes']);
+}
 
 // Consulta los datos del sistema segun el rol.
 cargar() {
