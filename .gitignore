@@ -1,0 +1,16 @@
+**/node_modules/
+**/dist/
+**/.angular/
+**/target/
+**/.idea/
+**/.vscode/
+*.log
+.env
+.env.*
+!.env.example
+
+sistema-citas-movil/
+
+**/nbproject/private/
+
+/sistema_citas.sql

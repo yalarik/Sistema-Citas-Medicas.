@@ -1,0 +1,37 @@
+import { Routes } from '@angular/router';
+import { authGuard, roleGuard } from './auth.guard';
+
+// Rutas del Sistema de Citas Médicas
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./app').then(m => m.AppComponent)
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+    loadComponent: () =>
+      import('./app').then(m => m.AppComponent)
+  },
+  {
+    path: 'doctor',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_DOCTOR'] },
+    loadComponent: () =>
+      import('./app').then(m => m.AppComponent)
+  },
+  {
+    path: 'paciente',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_PATIENT'] },
+    loadComponent: () =>
+      import('./app').then(m => m.AppComponent)
+  }
+];

@@ -1,0 +1,30 @@
+SISTEMA DE CITAS MEDICAS - FASES 1 A 4 - BASE DE TRABAJO
+
+1. En MySQL Workbench ejecutar sistema_citas.sql sobre una base de prueba.
+   Este script elimina y recrea la base sistema_citas.
+2. Configurar variable DB_PASSWORD en Windows con la contraseña local de MySQL.
+   Ejemplo PowerShell para esta ventana: $env:DB_PASSWORD = 'tu_clave_local'
+3. Abrir SistemaCitas en NetBeans y ejecutar el proyecto.
+   Swagger: http://localhost:8080/swagger-ui/index.html
+4. Abrir sistema-citas-web en VS Code.
+   Ejecutar: npm.cmd install
+   Ejecutar: npm.cmd start
+   Web: http://localhost:4200
+5. Abrir sistema-citas-movil en otra terminal.
+   Ejecutar: npm.cmd install
+   Ejecutar: npm.cmd start
+   Ionic: http://localhost:8100
+
+Usuarios de demostracion:
+Administrador: felipe@gmail.com / 123
+Paciente: felipe2@gmail.com / 111
+
+IMPORTANTE:
+- Backend preservado salvo credencial de MySQL sustituida por variable de entorno.
+- Angular e Ionic son interfaces iniciales muy sencillas que requieren pruebas e integracion.
+- No se ha ejecutado una compilacion completa porque no esta instalado Maven ni las dependencias npm en este entorno.
+- La interfaz de Angular incluye login, lista de usuarios/especialidades, medicos, agenda y registro de diagnostico.
+- La interfaz Ionic incluye login, consulta de horarios, reservas, historial y cancelacion.
+- Faltan funcionalidades administrativas completas como formularios CRUD, guards por rutas y despliegue nativo Capacitor.
+- Para un uso real, usar claves fuertes, almacenamiento cifrado de tokens en movil y HTTPS.
+- En un celular fisico, localhost se refiere al propio celular. Cambiar API por la IP del equipo o URL HTTPS.
