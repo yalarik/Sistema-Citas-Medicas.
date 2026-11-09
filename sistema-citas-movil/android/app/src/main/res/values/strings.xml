@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Citas Medicas</string>
+    <string name="title_activity_main">Citas Medicas</string>
+    <string name="package_name">gt.edu.umg.sistemacitas</string>
+    <string name="custom_url_scheme">gt.edu.umg.sistemacitas</string>
+</resources>

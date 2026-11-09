@@ -262,7 +262,8 @@ public class SecurityConfig {
                 "http://localhost:4200",
                 "http://localhost:8100",
                 "http://localhost",
-                "capacitor://localhost"
+                "capacitor://localhost",
+                "https://localhost"
         ));
 
         config.setAllowedMethods(List.of(

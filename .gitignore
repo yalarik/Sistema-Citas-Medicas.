@@ -9,8 +9,20 @@
 .env.*
 !.env.example
 
-sistema-citas-movil/
 
 **/nbproject/private/
 
 /sistema_citas.sql
+
+# Evitar copias duplicadas
+/Sistema_Citas_Con_Ionic_Integrado/
+
+# Archivos generados y privados de Android
+**/build/
+**/.gradle/
+**/local.properties
+*.apk
+*.aab
+*.jks
+*.keystore
+*.bak
