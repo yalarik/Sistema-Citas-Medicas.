@@ -279,7 +279,12 @@ public class CitaService {
             );
         }
 
-        cita.setDiagnostico(diagnostico.trim());
+        String diagnosticoLimpio = diagnostico.trim();
+        if (diagnosticoLimpio.codePointCount(0, diagnosticoLimpio.length()) > 499) {
+            throw new IllegalArgumentException("El diagnostico no puede superar 499 caracteres");
+        }
+
+        cita.setDiagnostico(diagnosticoLimpio);
         cita.setReceta(receta);
         cita.setEstado(EstadoCita.COMPLETADA);
 

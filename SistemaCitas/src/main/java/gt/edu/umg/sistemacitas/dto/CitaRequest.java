@@ -3,6 +3,7 @@ package gt.edu.umg.sistemacitas.dto;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,6 +18,10 @@ public class CitaRequest {
 
     @NotBlank(message = "El motivo es obligatorio")
     private String motivo;
+
+    @NotBlank(message = "specialtyCode es obligatorio")
+    @Pattern(regexp = "^[0-9]{6}$", message = "specialtyCode debe contener exactamente 6 digitos numericos")
+    private String specialtyCode;
 
     public CitaRequest() {
     }
@@ -43,5 +48,12 @@ public class CitaRequest {
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
+    }
+    public String getSpecialtyCode() {
+        return specialtyCode;
+    }
+
+    public void setSpecialtyCode(String specialtyCode) {
+        this.specialtyCode = specialtyCode;
     }
 }

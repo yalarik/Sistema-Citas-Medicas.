@@ -17,7 +17,7 @@ interface Paciente {
 interface Doctor {
   id: number;
   usuario?: { nombre: string };
-  especialidad?: { nombre: string };
+  especialidad?: { id: number; nombre: string };
 }
 
 interface Horario {
@@ -264,7 +264,8 @@ export class SecretariaPageComponent implements OnInit {
     }
     this.guardando = true;
     this.http.post<Cita>(API + '/secretary/appointments', {
-      fecha: this.fecha, hora: this.hora, motivo: this.motivo.trim()
+      fecha: this.fecha, hora: this.hora, motivo: this.motivo.trim(),
+      specialtyCode: String(this.doctores.find(d => Number(d.id) === Number(this.doctorId))?.especialidad?.id ?? '').padStart(6, '0')
     }, {
       params: { pacienteId: String(this.pacienteId), doctorId: String(this.doctorId) }
     }).subscribe({

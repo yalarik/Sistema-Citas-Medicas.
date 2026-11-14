@@ -18,6 +18,9 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
             LocalDate fecha
     );
 
+    List<Cita> findByDoctorIdAndEstadoOrderByFechaDescHoraDesc(
+            Long doctorId, EstadoCita estado);
+
     List<Cita> findByEstado(
             EstadoCita estado
     );

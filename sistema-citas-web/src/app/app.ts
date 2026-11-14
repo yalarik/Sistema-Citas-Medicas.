@@ -349,6 +349,7 @@ imports: [CommonModule, FormsModule, ReactiveFormsModule],
 <!-- Citas e historial del paciente -->
 <section *ngIf="token && rol==='ROLE_PATIENT'">
   <h2>Reservar cita</h2>
+  <button type="button" (click)="irAFichaPaciente()">Ver mi ficha de paciente</button>
   <label>Médico
     <select [(ngModel)]="reservaDoctorId" (ngModelChange)="horarios=[];horaReserva=''">
       <option [ngValue]="0">Seleccione un médico</option>
@@ -368,7 +369,15 @@ imports: [CommonModule, FormsModule, ReactiveFormsModule],
       </select>
     </label>
     <label>Motivo <input [(ngModel)]="motivoReserva" placeholder="Motivo de consulta"></label>
-    <button (click)="reservar()">Reservar cita</button>
+    <label>Número de seguro médico u origen de afiliación (obligatorio)
+      <input type="text" [value]="numeroSeguroAfiliacion"
+             (input)="filtrarNumeroAfiliacion($event)"
+             pattern="[A-Za-z0-9]+" required
+             placeholder="Solo letras y números, sin espacios">
+    </label>
+    <p *ngIf="!numeroSeguroAfiliacionValido">Ingresá un valor alfanumérico, sin espacios ni símbolos.</p>
+    <button type="button" (click)="reservar()"
+            [disabled]="!numeroSeguroAfiliacionValido || !motivoReserva.trim() || !horaReserva || !reservaDoctorId || !fechaReserva">Reservar cita</button>
   </div>
   <h2>Mis citas e historial</h2>
   <button (click)="historial()">Consultar mis citas</button>
@@ -377,7 +386,7 @@ imports: [CommonModule, FormsModule, ReactiveFormsModule],
     <tr *ngFor="let c of misCitas">
       <td>{{c.fecha}}</td><td>{{c.hora}}</td><td>{{c.doctorNombre}}</td><td>{{c.motivo}}</td>
       <td>{{c.estado}}</td><td>{{c.diagnostico || '-'}}</td><td>{{c.receta || '-'}}</td>
-      <td><button *ngIf="c.estado==='PENDIENTE'" (click)="cancelar(c.id)">Cancelar</button></td>
+      <td><button *ngIf="c.estado==='PENDIENTE'" (click)="abrirAyudaCancelacion(c.id)">Cancelar</button></td>
     </tr>
   </table>
 </section>
@@ -464,6 +473,7 @@ datosEspecialidad = {
   horariosConsultados = false;
   horaReserva = '';
   motivoReserva = '';
+  numeroSeguroAfiliacion = '';
   misCitas: any[] = [];
 
   constructor() {
@@ -542,6 +552,27 @@ irAReportes() {
   this.router.navigate(['/admin/reportes']);
 }
 
+  // Nueva pantalla personal, protegida por rol PATIENT.
+irAFichaPaciente() {
+  this.router.navigate(['/paciente/ficha']);
+}
+
+// Vista web pública de ayuda; la cancelación real requiere JWT.
+abrirAyudaCancelacion(citaId: number) {
+  this.router.navigate(['/Public/appointments/cancel-help'], { queryParams: { citaId } });
+}
+
+get numeroSeguroAfiliacionValido(): boolean {
+  return /^[A-Za-z0-9]+$/.test(this.numeroSeguroAfiliacion);
+}
+
+filtrarNumeroAfiliacion(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const limpio = input.value.replace(/[^A-Za-z0-9]/g, '');
+  if (input.value !== limpio) input.value = limpio;
+  this.numeroSeguroAfiliacion = limpio;
+}
+
 // Consulta los datos del sistema segun el rol.
 cargar() {
   this.http.get<any[]>(API + '/doctors').subscribe({
@@ -613,14 +644,20 @@ cargar() {
       this.error = 'Complete todos los datos de la cita';
       return;
     }
+    if (!this.numeroSeguroAfiliacionValido) {
+      this.error = 'El número de seguro o afiliación es obligatorio y solo admite letras y números.';
+      return;
+    }
     this.http.post(API + '/appointments', {
       fecha: this.fechaReserva,
       hora: this.horaReserva,
-      motivo: this.motivoReserva.trim()
+      motivo: this.motivoReserva.trim(),
+      specialtyCode: String(this.doctores.find(d => Number(d.id) === Number(this.reservaDoctorId))?.especialidad?.id ?? '').padStart(6, '0')
     }, { params: { doctorId: this.reservaDoctorId } }).subscribe({
       next: () => {
         this.mensaje = 'Cita reservada correctamente';
         this.motivoReserva = '';
+        this.numeroSeguroAfiliacion = '';
         this.horarios = [];
         this.horaReserva = '';
         this.horariosConsultados = false;

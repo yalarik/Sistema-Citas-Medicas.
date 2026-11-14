@@ -20,6 +20,18 @@ export const routes: Routes = [
       import('./pages/admin/reportes').then(m => m.ReportesPageComponent)
   },
   {
+    path: 'Public/appointments/cancel-help',
+    loadComponent: () =>
+      import('./pages/public/cancel-appointment').then(m => m.CancelAppointmentComponent)
+  },
+  {
+    path: 'paciente/ficha',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_PATIENT'] },
+    loadComponent: () =>
+      import('./pages/paciente/ficha-paciente').then(m => m.FichaPacienteComponent)
+  },
+  {
     path: 'secretaria',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ROLE_SECRETARY'] },

@@ -23,7 +23,7 @@ public class Cita {
     @Column(name = "motivo", nullable = false, length = 500)
     private String motivo;
 
-    @Column(name = "diagnostico", length = 1000)
+    @Column(name = "diagnostico", length = 499)
     private String diagnostico;
 
     @Column(name = "receta", length = 1000)
